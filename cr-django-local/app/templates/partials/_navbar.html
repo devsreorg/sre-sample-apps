@@ -1,0 +1,68 @@
+{% load static %}
+<!--Navbar-->
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark sticky-top">
+    <div class="container">
+        <a href="{% url 'core:index' %}" class="navbar-brand">
+            <p class="display-4">
+            Cloud Resources 
+            </p>
+        </a>
+        <button 
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navmenu"
+        >
+        <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navmenu">
+            <ul class="navbar-nav ms-auto">
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a href="{% url 'core:dashboard' %}"
+                            {% if 'dashboard' in request.path %}
+                                class="nav-link active" 
+                            {% else %}
+                                class="nav-link" 
+                            {% endif %}
+                            >
+                            Welcome <strong>{{ user.username }}</strong> ({{ user.first_name }})
+                        </a>    
+                    </li>
+                    <li class="nav-item">
+                        <a href="javascript:{document.getElementById('logout').submit()}" class="nav-link">
+                            Logout
+                        </a>
+                        <form action="{% url 'core:logout' %}" method="POST" id="logout">
+                            {% csrf_token %}
+                            <input type="hidden">
+                        </form>                         
+                    </li>                    
+                {% else %}
+                    <li class="nav-item">
+                        <a href="{% url 'core:register' %}"
+                            {% if 'register' in request.path %}
+                                class="nav-link active" 
+                            {% else %}
+                                class="nav-link" 
+                            {% endif %}
+                            >
+                            Register
+                        </a>    
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'core:login' %}"
+                            {% if 'Login' in request.path %}
+                                class="nav-link active" 
+                            {% else %}
+                                class="nav-link" 
+                            {% endif %}
+                            >
+                            Login
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>    
+    </div>
+</nav>
