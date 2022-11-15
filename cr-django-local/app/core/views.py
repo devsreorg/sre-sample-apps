@@ -2,11 +2,10 @@ import time, random
 from django.shortcuts import render, redirect
 from django.contrib import messages, auth
 from django.contrib.auth.models import User
-# from prometheus_client import Summary, Histogram
+#from prometheus_client import Histogram
 
 
-# s = Summary('summary_latency_seconds', 'Dashboard response latency in seconds')
-# h = Histogram('histogram_latency_seconds', 'Dashboard response latency in seconds')
+#h = Histogram('login_to_dashboard_histogram_latency', 'Latency (histogram) to /dashboard in seconds')
 
 
 def index(request):
@@ -47,8 +46,6 @@ def register(request):
 
 
 def login(request):
-  ## Add random delay ##
-  # time.sleep(random.randint(1, 10))
   if request.method == 'POST':
     username = request.POST['username']
     password = request.POST['password']
@@ -57,8 +54,8 @@ def login(request):
 
     if user is not None:
       auth.login(request, user)
-      ## start_time ##
-      request.session['start_time'] = time.time()
+      ## login_start_time ##
+      #request.session['login_start_time'] = time.time()
       return redirect('core:dashboard')
     else:
       messages.error(request, 'Invalid credentials')
@@ -79,8 +76,7 @@ def dashboard(request):
     ## Add delay ##
     # time.sleep(3)
     ## total_time ##
-    total_time = time.time() - request.session.get('start_time')
+    #total_time = time.time() - request.session.get('login_start_time')
     ## Instrument ##
-    # s.observe(total_time)
-    # h.observe(total_time)
-    return render(request, 'core/dashboard.html')
+    #h.observe(total_time)      
+    return render(request, 'core/dashboard.html') 

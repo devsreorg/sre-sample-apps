@@ -4,15 +4,16 @@ from botocore.exceptions import ClientError
 import time, random
 from datetime import datetime, timezone
 from django.shortcuts import render, redirect
-# from prometheus_client import Summary, Histogram
+#from prometheus_client import Histogram
 
 
-# s = Summary('summary_latency_seconds', 'Dashboard response latency in seconds')
-# h = Histogram('histogram_latency_seconds', 'Dashboard response latency in seconds')
+#h = Histogram('dashboard_to_aws_histogram_latency', 'Latency (histogram) to /aws in seconds')
 
 
 def index(request):
     if request.user.is_authenticated:
+        ## aws_start_time ##
+        #request.session['aws_start_time'] = time.time()
         key_id = str(os.environ.get('AWS_ACCESS_KEY_ID')).strip()
         access_key = str(os.environ.get('AWS_SECRET_ACCESS_KEY')).strip()
         region = str(os.environ.get('AWS_REGION')).strip()
@@ -33,6 +34,10 @@ def index(request):
         context = {
                 'response': response,
             }
+        ## total_time ##
+        #total_time = time.time() - request.session.get('aws_start_time')
+        ## Instrument ##
+        #h.observe(total_time)
         return render(request, 'aws/index.html', context)
     else:
         return redirect('core:login')
